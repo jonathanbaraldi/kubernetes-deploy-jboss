@@ -5,14 +5,17 @@ metadata:
 spec:
   selector:
     app: helloserver
-  type: NodePort
+  type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 8080
+    - port: 8080
       targetPort: 8080
-    - protocol: TCP
-      port: 9090
+      protocol: TCP
+      name: http
+    - port: 9090
       targetPort: 9090
+      protocol: TCP
+      name: admin
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -37,6 +40,4 @@ spec:
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         ports:
         - containerPort: 8080
-          name: http
         - containerPort: 9090
-          name: admin
