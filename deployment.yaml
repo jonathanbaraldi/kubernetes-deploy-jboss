@@ -1,30 +1,13 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: helloserver-service
-spec:
-  selector:
-    app: helloserver
-  type: ClusterIP
-  ports:
-    - port: 8080
-      targetPort: 8080
-      protocol: TCP
-      name: http
-    - port: 9090
-      targetPort: 9090
-      protocol: TCP
-      name: admin
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-helloserver
+  namespace: java
   labels:
     app: helloserver
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: helloserver
@@ -41,3 +24,42 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 9090
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: helloserver-service
+  namespace: java
+spec:
+  selector:
+    app: helloserver
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+    - port: 9090
+      targetPort: 9090
+      protocol: TCP
+      name: admin
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: java
+  name: helloserver-ingress
+  annotations:
+    allow.http: "false"
+spec:
+  rules:
+  - host: hello-server.prod.kubernetes.sebrae.com.br
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: helloserver-service
+            servicePort: 8080
