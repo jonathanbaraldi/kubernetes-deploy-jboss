@@ -2,48 +2,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-helloserver
+  name: jboss-server
   namespace: java
   labels:
-    app: helloserver
+    app: jbossapi
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: helloserver
+      app: jbossapi
   template:
     metadata:
       labels:
-        app: helloserver
+        app: jbossapi
     spec:
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-      - name: helloserver
+      - name: jbossapi
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         ports:
         - containerPort: 8080
-        - containerPort: 9090
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: helloserver-service
+  name: jboss-service
   namespace: java
 spec:
   selector:
-    app: helloserver
+    app: jbossapi
   type: ClusterIP
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
       protocol: TCP
       name: http
-    - port: 9090
-      targetPort: 9090
-      protocol: TCP
-      name: admin
 
 
 ---
@@ -51,15 +46,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: java
-  name: helloserver-ingress
+  name: jboss-ingress
   annotations:
     allow.http: "false"
 spec:
   rules:
-  - host: hello-server.prod.kubernetes.sebrae.com.br
+  - host: wildfly.prod.globaltranscribe.com
     http:
       paths:
         - path: /
           backend:
-            serviceName: helloserver-service
-            servicePort: 8080
+            serviceName: jboss-service
+            servicePort: 80

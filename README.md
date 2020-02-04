@@ -1,14 +1,14 @@
-# pipeline-example-go
+- Colocar os logs para todos no dashboard
+- Fazer deployment de aplicação Node...minha, melhorar a GO...com os serviços, e melhorar essa.
+- Configuração do istio, e do Jaeger - 
+
+
+
+
+
+# pipeline-example-java
 
 This is a sample golang project to demonstrate the integration with rancher pipeline.
-
-## Building
-
-`go build -o ./bin/hello-server`
-
-## Running
-
-`./bin/hello-server`
 
 # License
 
