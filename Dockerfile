@@ -6,7 +6,7 @@ ENV WILDFLY_VERSION 18.0.1.Final
 ENV WILDFLY_SHA1 ef0372589a0f08c36b15360fe7291721a7e3f7d9
 ENV JBOSS_HOME /opt/jboss/wildfly
 
-ENV GOKUBE jonathan-v7
+ENV GOKUBE jonathan-v8
 
 USER root
 
